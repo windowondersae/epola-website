@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ePola — உங்கள் கிரசரி பட்ஜெட்டை சேமியுங்கள் | ஏறாவூர், மட்டக்களப்பு</title>
+  <meta name="description" content="ePola ஏறாவூரில் உள்ள 35+ கடைகளின் daily விலைகளை track செய்கிறது. காய்கறி, மீன், இறைச்சி, கிரசரி — ஒவ்வொரு வாரமும் update. முற்றிலும் இலவசம்." />
+  <meta property="og:title" content="ePola — Smart Shopping Starts Here" />
+  <meta property="og:description" content="ஏறாவூரில் மலிவான விலை தெரிய வேண்டுமா? ePola பார்க்கவும்." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://epolalk.net" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=Noto+Sans+Tamil:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue:   #00AACC;
+      --blue-d: #007fa0;
+      --blue-l: #e6f7fb;
+      --navy:   #1a2b3c;
+      --green:  #00c48c;
+      --amber:  #ffb800;
+      --red:    #e63946;
+      --gray:   #f4f7fa;
+      --gray-2: #e8edf2;
+      --text:   #1a2b3c;
+      --text-m: #4a6080;
+      --text-l: #8299b0;
+      --white:  #ffffff;
+      --radius: 16px;
+      --shadow: 0 4px 24px rgba(0,170,204,0.12);
+      --shadow-l: 0 12px 48px rgba(0,170,204,0.18);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Sans Tamil', 'DM Sans', sans-serif;
+      color: var(--text); background: var(--white); overflow-x: hidden;
+    }
+    body.lang-en { font-family: 'DM Sans', sans-serif; }
+
+    /* ── LANG TOGGLE ── */
+    .lang-bar {
+      background: var(--navy); padding: 8px 5%;
+      display: flex; justify-content: flex-end; align-items: center; gap: 12px;
+    }
+    .lang-bar span { font-size: 0.78rem; color: rgba(255,255,255,0.5); }
+    .lang-btn {
+      padding: 5px 16px; border-radius: 50px; border: none; cursor: pointer;
+      font-size: 0.78rem; font-weight: 600; transition: all 0.2s;
+    }
+    .lang-btn.active { background: var(--blue); color: var(--white); }
+    .lang-btn:not(.active) { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); }
+    .lang-btn:not(.active):hover { background: rgba(255,255,255,0.2); color: var(--white); }
+
+    /* hide/show lang content */
+    .ta { display: block; }
+    .en { display: none; }
+    body.lang-en .ta { display: none; }
+    body.lang-en .en { display: block; }
+    /* inline spans */
+    span.ta { display: inline; }
+    span.en { display: none; }
+    body.lang-en span.ta { display: none; }
+    body.lang-en span.en { display: inline; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.94); backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--gray-2);
+      padding: 0 5%; display: flex; align-items: center;
+      justify-content: space-between; height: 68px;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 1.5rem; color: var(--navy); text-decoration: none;
+    }
+    .nav-logo-icon {
+      width: 38px; height: 38px; background: var(--blue);
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    }
+    .nav-logo span { color: var(--blue); }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a {
+      font-size: 0.88rem; font-weight: 500; color: var(--text-m);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--blue); }
+    .nav-cta {
+      background: var(--blue) !important; color: var(--white) !important;
+      padding: 9px 20px; border-radius: 50px; font-weight: 600 !important;
+    }
+    .nav-cta:hover { background: var(--blue-d) !important; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 92vh; padding: 80px 5%;
+      display: grid; grid-template-columns: 1.1fr 0.9fr;
+      align-items: center; gap: 60px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; top: -150px; right: -150px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(0,170,204,0.07) 0%, transparent 70%);
+      border-radius: 50%; pointer-events: none;
+    }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.5)} }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--blue-l); color: var(--blue-d);
+      padding: 6px 16px; border-radius: 50px;
+      font-size: 0.82rem; font-weight: 600; margin-bottom: 22px;
+      border: 1px solid rgba(0,170,204,0.2);
+      animation: fadeUp 0.5s ease both;
+    }
+    .hero-badge-dot { width:6px;height:6px;background:var(--blue);border-radius:50%;animation:pulse 2s infinite; }
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.2rem, 3.8vw, 3.4rem);
+      font-weight: 800; line-height: 1.15; color: var(--navy);
+      margin-bottom: 18px; animation: fadeUp 0.5s 0.1s ease both;
+    }
+    .hero h1 em { color: var(--blue); font-style: normal; }
+    .hero-sub {
+      font-size: 1.05rem; color: var(--text-m); line-height: 1.8;
+      max-width: 500px; margin-bottom: 32px;
+      animation: fadeUp 0.5s 0.2s ease both;
+    }
+    .hero-actions {
+      display: flex; gap: 14px; flex-wrap: wrap;
+      animation: fadeUp 0.5s 0.3s ease both;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 9px;
+      background: var(--blue); color: var(--white);
+      padding: 13px 26px; border-radius: 50px;
+      font-weight: 600; font-size: 0.94rem; text-decoration: none;
+      box-shadow: 0 4px 20px rgba(0,170,204,.35); transition: all .2s;
+    }
+    .btn-primary:hover { background: var(--blue-d); transform: translateY(-2px); }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 9px;
+      background: var(--white); color: var(--navy);
+      padding: 13px 26px; border-radius: 50px;
+      font-weight: 600; font-size: 0.94rem; text-decoration: none;
+      border: 2px solid var(--gray-2); transition: all .2s;
+    }
+    .btn-secondary:hover { border-color: var(--blue); color: var(--blue); transform: translateY(-2px); }
+    .hero-stats {
+      display: flex; gap: 36px; margin-top: 44px; flex-wrap: wrap;
+      animation: fadeUp 0.5s 0.4s ease both;
+    }
+    .stat-num { font-family:'Syne',sans-serif; font-size:2rem; font-weight:800; color:var(--navy); line-height:1; }
+    .stat-lbl { font-size:.78rem; color:var(--text-l); margin-top:4px; }
+
+    /* Hero Card */
+    .hero-visual { animation: fadeIn 0.8s 0.3s ease both; position: relative; }
+    .price-card {
+      background: var(--white); border-radius: 20px;
+      box-shadow: var(--shadow-l); padding: 24px;
+      border: 1px solid var(--gray-2);
+    }
+    .pc-header {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;
+    }
+    .pc-title { font-family:'Syne',sans-serif; font-weight:700; font-size:.95rem; color:var(--navy); }
+    .pc-date { font-size:.75rem; color:var(--text-l); }
+    .pc-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 0; border-bottom: 1px solid var(--gray);
+    }
+    .pc-row:last-child { border-bottom: none; }
+    .pc-item { display:flex; align-items:center; gap:10px; font-size:.88rem; color:var(--text-m); }
+    .pc-vals { display:flex; gap:10px; align-items:center; }
+    .pc-old { font-size:.78rem; color:var(--text-l); text-decoration:line-through; }
+    .pc-best {
+      font-family:'Syne',sans-serif; font-weight:700; font-size:.88rem;
+      color:var(--green); background:rgba(0,196,140,.1); padding:3px 10px; border-radius:20px;
+    }
+    .float-badge {
+      position:absolute; background:var(--white); border-radius:14px;
+      box-shadow:var(--shadow-l); padding:11px 15px;
+      display:flex; align-items:center; gap:10px;
+      border:1px solid var(--gray-2); animation: float 4s ease-in-out infinite;
+    }
+    .fb-top { top:-18px; right:-18px; }
+    .fb-bot { bottom:-14px; left:-18px; animation-delay:1.5s; }
+    .fb-ic { width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem; }
+    .fb-ic.g { background:rgba(0,196,140,.12); }
+    .fb-ic.a { background:rgba(255,184,0,.12); }
+    .fb-t1 { font-size:.7rem; color:var(--text-l); }
+    .fb-t2 { font-family:'Syne',sans-serif; font-weight:700; font-size:.88rem; color:var(--navy); }
+
+    /* ── MARQUEE ── */
+    .marquee-wrap { background:var(--navy); padding:13px 0; overflow:hidden; }
+    .marquee-track {
+      display:flex; white-space:nowrap;
+      animation: marquee 24s linear infinite;
+    }
+    @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    .m-item {
+      display:inline-flex; align-items:center; gap:10px;
+      padding:0 28px; color:rgba(255,255,255,.65); font-size:.84rem; font-weight:500;
+    }
+    .m-item strong { color:var(--white); }
+    .m-dot { width:4px;height:4px;background:var(--blue);border-radius:50%;flex-shrink:0; }
+
+    /* ── SECTIONS ── */
+    section { padding: 90px 5%; }
+    .s-label {
+      display:inline-block; font-size:.74rem; font-weight:700;
+      letter-spacing:.12em; text-transform:uppercase;
+      color:var(--blue); margin-bottom:10px;
+    }
+    .s-title {
+      font-family:'Syne',sans-serif;
+      font-size:clamp(1.75rem,3vw,2.5rem);
+      font-weight:800; color:var(--navy); line-height:1.22; margin-bottom:14px;
+    }
+    .s-title em { color:var(--blue); font-style:normal; }
+    .s-sub { font-size:1rem; color:var(--text-m); line-height:1.75; max-width:560px; }
+    .s-hdr { margin-bottom:52px; }
+    .s-hdr.center { text-align:center; }
+    .s-hdr.center .s-sub { margin:0 auto; }
+
+    /* ── HOW IT WORKS ── */
+    .how { background:var(--gray); }
+    .steps { display:grid; grid-template-columns:repeat(3,1fr); gap:26px; }
+    .step {
+      background:var(--white); border-radius:var(--radius);
+      padding:34px 26px; position:relative;
+      border:1px solid var(--gray-2); transition:all .25s;
+    }
+    .step:hover { transform:translateY(-6px); box-shadow:var(--shadow-l); }
+    .step-n {
+      position:absolute; top:-15px; left:26px;
+      width:34px; height:34px; background:var(--blue);
+      border-radius:9px; display:flex; align-items:center; justify-content:center;
+      font-family:'Syne',sans-serif; font-weight:800; font-size:.88rem; color:var(--white);
+      box-shadow:0 4px 12px rgba(0,170,204,.4);
+    }
+    .step-ico { font-size:2.1rem; margin:10px 0 14px; }
+    .step-ttl { font-family:'Syne',sans-serif; font-weight:700; font-size:1.05rem; color:var(--navy); margin-bottom:9px; }
+    .step-dsc { font-size:.88rem; color:var(--text-m); line-height:1.65; }
+
+    /* ── CATEGORIES ── */
+    .cats { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:18px; }
+    .cat {
+      background:var(--white); border-radius:var(--radius);
+      padding:26px 18px; text-align:center;
+      border:2px solid var(--gray-2); transition:all .25s; cursor:default;
+    }
+    .cat:hover { border-color:var(--blue); background:var(--blue-l); transform:translateY(-4px); box-shadow:var(--shadow); }
+    .cat-ico { font-size:2.3rem; margin-bottom:11px; }
+    .cat-nm { font-family:'Syne',sans-serif; font-weight:700; font-size:.9rem; color:var(--navy); margin-bottom:3px; }
+    .cat-nt { font-size:.74rem; color:var(--text-l); }
+
+    /* ── PRICE TABLE ── */
+    .price-sec { background:var(--navy); }
+    .price-sec .s-label { color:var(--blue); }
+    .price-sec .s-title { color:var(--white); }
+    .price-sec .s-sub { color:rgba(255,255,255,.6); }
+    .pt-wrap {
+      background:rgba(255,255,255,.05); border-radius:20px;
+      overflow:hidden; border:1px solid rgba(255,255,255,.1);
+    }
+    .pt-head-row, .pt-row {
+      display:grid; grid-template-columns:2fr 1fr 1fr 1fr;
+      padding:16px 22px; align-items:center;
+    }
+    .pt-head-row {
+      background:rgba(0,170,204,.15);
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .pt-hcell {
+      font-size:.72rem; font-weight:700; letter-spacing:.08em;
+      text-transform:uppercase; color:rgba(255,255,255,.45);
+    }
+    .pt-hcell.r { text-align:right; }
+    .pt-row { border-bottom:1px solid rgba(255,255,255,.06); transition:background .2s; }
+    .pt-row:last-child { border-bottom:none; }
+    .pt-row:hover { background:rgba(255,255,255,.04); }
+    .pt-itm { display:flex; align-items:center; gap:11px; }
+    .pt-ic {
+      width:34px; height:34px; background:rgba(255,255,255,.08);
+      border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:1rem;
+    }
+    .pt-nm { font-weight:500; font-size:.9rem; color:var(--white); }
+    .pt-un { font-size:.73rem; color:rgba(255,255,255,.4); }
+    .pt-p { font-family:'Syne',sans-serif; font-weight:700; font-size:.88rem; color:rgba(255,255,255,.55); text-align:right; }
+    .pt-p.best { color:var(--green); }
+    .pt-badge {
+      display:inline-block; background:rgba(0,196,140,.15);
+      color:var(--green); font-size:.7rem; font-weight:700;
+      padding:3px 9px; border-radius:20px; float:right;
+    }
+    .pt-disc {
+      text-align:center; padding:18px; font-size:.78rem;
+      color:rgba(255,255,255,.3); border-top:1px solid rgba(255,255,255,.06);
+    }
+
+    /* ── WHY ── */
+    .why-grid { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+    .why-card {
+      padding:30px; border-radius:var(--radius);
+      border:2px solid var(--gray-2); position:relative; overflow:hidden; transition:all .25s;
+    }
+    .why-card:hover { border-color:var(--blue); transform:translateY(-4px); box-shadow:var(--shadow); }
+    .why-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:3px;
+      background:linear-gradient(90deg,var(--blue),var(--green));
+      opacity:0; transition:opacity .25s;
+    }
+    .why-card:hover::before { opacity:1; }
+    .why-ico { font-size:1.9rem; margin-bottom:14px; }
+    .why-ttl { font-family:'Syne',sans-serif; font-weight:700; font-size:1rem; color:var(--navy); margin-bottom:9px; }
+    .why-dsc { font-size:.88rem; color:var(--text-m); line-height:1.65; }
+
+    /* ── WA CTA ── */
+    .wa-sec {
+      background:linear-gradient(135deg,#00AACC 0%,#007fa0 100%);
+      padding:76px 5%; text-align:center; position:relative; overflow:hidden;
+    }
+    .wa-sec::before {
+      content:''; position:absolute; top:-80px; right:-80px;
+      width:280px; height:280px; background:rgba(255,255,255,.06); border-radius:50%;
+    }
+    .wa-ttl {
+      font-family:'Syne',sans-serif; font-size:clamp(1.7rem,3vw,2.3rem);
+      font-weight:800; color:var(--white); margin-bottom:12px;
+    }
+    .wa-sub { font-size:.98rem; color:rgba(255,255,255,.8); max-width:480px; margin:0 auto 32px; line-height:1.7; }
+    .btn-wa {
+      display:inline-flex; align-items:center; gap:11px;
+      background:#25D366; color:var(--white);
+      padding:15px 32px; border-radius:50px;
+      font-weight:700; font-size:.96rem; text-decoration:none;
+      box-shadow:0 8px 26px rgba(0,0,0,.2); transition:all .2s; margin:0 8px 10px;
+    }
+    .btn-wa:hover { background:#1da851; transform:translateY(-2px); }
+    .btn-fb {
+      display:inline-flex; align-items:center; gap:11px;
+      background:rgba(255,255,255,.14); color:var(--white);
+      padding:15px 32px; border-radius:50px;
+      font-weight:700; font-size:.96rem; text-decoration:none;
+      border:2px solid rgba(255,255,255,.28); transition:all .2s; margin:0 8px 10px;
+    }
+    .btn-fb:hover { background:rgba(255,255,255,.24); transform:translateY(-2px); }
+
+    /* ── VENDOR NUMS ── */
+    .vn-sec { background:var(--gray); }
+    .vn-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin-bottom:50px; }
+    .vn-card {
+      background:var(--white); border-radius:var(--radius);
+      padding:26px; text-align:center; border:1px solid var(--gray-2);
+    }
+    .vn-num { font-family:'Syne',sans-serif; font-size:2.2rem; font-weight:800; color:var(--blue); }
+    .vn-lbl { font-size:.83rem; color:var(--text-m); margin-top:5px; }
+
+    /* ── FOOTER ── */
+    footer { background:var(--navy); color:rgba(255,255,255,.55); padding:56px 5% 30px; }
+    .ft-grid { display:grid; grid-template-columns:2fr 1fr 1fr; gap:44px; margin-bottom:44px; }
+    .ft-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:1.5rem; color:var(--white); margin-bottom:11px; }
+    .ft-logo span { color:var(--blue); }
+    .ft-desc { font-size:.86rem; line-height:1.72; max-width:290px; }
+    .ft-contact { margin-top:18px; display:flex; flex-direction:column; gap:7px; }
+    .ft-contact a { color:rgba(255,255,255,.45); text-decoration:none; font-size:.83rem; transition:color .2s; }
+    .ft-contact a:hover { color:var(--blue); }
+    .ft-col-ttl {
+      font-family:'Syne',sans-serif; font-weight:700; font-size:.82rem;
+      color:var(--white); letter-spacing:.06em; text-transform:uppercase; margin-bottom:18px;
+    }
+    .ft-links { display:flex; flex-direction:column; gap:10px; }
+    .ft-links a { font-size:.86rem; color:rgba(255,255,255,.45); text-decoration:none; transition:color .2s; }
+    .ft-links a:hover { color:var(--blue); }
+    .ft-bottom {
+      border-top:1px solid rgba(255,255,255,.08); padding-top:22px;
+      display:flex; justify-content:space-between; align-items:center;
+      font-size:.78rem; flex-wrap:wrap; gap:10px;
+    }
+    .ft-socials { display:flex; gap:10px; }
+    .ft-soc {
+      width:34px; height:34px; background:rgba(255,255,255,.08);
+      border-radius:9px; display:flex; align-items:center; justify-content:center;
+      color:rgba(255,255,255,.45); text-decoration:none; transition:all .2s; font-size:.85rem;
+    }
+    .ft-soc:hover { background:var(--blue); color:var(--white); }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:900px){
+      .hero { grid-template-columns:1fr; padding:70px 5% 50px; }
+      .hero-visual { display:none; }
+      .steps { grid-template-columns:1fr; }
+      .why-grid { grid-template-columns:1fr; }
+      .vn-grid { grid-template-columns:repeat(2,1fr); }
+      .ft-grid { grid-template-columns:1fr; gap:32px; }
+      .ft-bottom { flex-direction:column; text-align:center; }
+      .pt-head-row, .pt-row { grid-template-columns:2fr 1fr 1fr; }
+      .pt-hcell:nth-child(3),
+      .pt-row > div:nth-child(3) { display:none; }
+      .nav-links { display:none; }
+    }
+    @media(max-width:600px){
+      .cats { grid-template-columns:repeat(2,1fr); }
+      .hero h1 { font-size:2rem; }
+      .hero-actions { flex-direction:column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LANGUAGE BAR -->
+<div class="lang-bar">
+  <span>🌐</span>
+  <button class="lang-btn active" id="btn-ta" onclick="setLang('ta')">தமிழ்</button>
+  <button class="lang-btn" id="btn-en" onclick="setLang('en')">English</button>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+      </svg>
+    </div>
+    <span>e</span>Pola
+  </a>
+  <div class="nav-links">
+    <a href="#how">
+      <span class="ta">எப்படி வேலை செய்கிறது</span>
+      <span class="en">How It Works</span>
+    </a>
+    <a href="#cats">
+      <span class="ta">வகைகள்</span><span class="en">Categories</span>
+    </a>
+    <a href="#prices">
+      <span class="ta">விலைகள்</span><span class="en">Prices</span>
+    </a>
+    <a href="#about">
+      <span class="ta">எங்களை பற்றி</span><span class="en">About</span>
+    </a>
+    <a href="https://wa.me/94761736615" class="nav-cta" target="_blank">
+      📲 <span class="ta">WhatsApp சேருங்கள்</span><span class="en">Join WhatsApp</span>
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div>
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      <span class="ta">ஏறாவூர், மட்டக்களப்பு — இப்போதே Live</span>
+      <span class="en">Live in Eravur, Batticaloa</span>
+    </div>
+
+    <h1 class="ta">வீட்டை விட்டு கிளம்பும் முன்<br/><em>ஏறாவூரில் மலிவான</em><br/>விலை தெரிந்திருங்கள்!</h1>
+    <h1 class="en">Find the <em>Cheapest Prices</em><br/>in Eravur Before<br/>You Leave Home!</h1>
+
+    <p class="hero-sub ta">ePola ஏறாவூரில் உள்ள 35+ கடைகளின் காய்கறி, மீன், இறைச்சி, கிரசரி விலைகளை ஒவ்வொரு வாரமும் சேகரிக்கிறது. முற்றிலும் இலவசம்.</p>
+    <p class="hero-sub en">ePola tracks weekly prices from 35+ local vendors across Eravur — vegetables, fish, meat, groceries. Updated every week. Completely free.</p>
+
+    <div class="hero-actions">
+      <a href="https://wa.me/94761736615" class="btn-primary" target="_blank">
+        📲 <span class="ta">WhatsApp Channel சேருங்கள்</span><span class="en">Join WhatsApp Channel</span>
+      </a>
+      <a href="https://www.facebook.com/profile.php?id=61590635816197" class="btn-secondary" target="_blank">
+        👍 <span class="ta">Facebook Follow செய்யுங்கள்</span><span class="en">Follow on Facebook</span>
+      </a>
+    </div>
+
+    <div class="hero-stats">
+      <div><div class="stat-num">35+</div><div class="stat-lbl"><span class="ta">கடைகள்</span><span class="en">Vendors</span></div></div>
+      <div><div class="stat-num">8+</div><div class="stat-lbl"><span class="ta">வகைகள்</span><span class="en">Categories</span></div></div>
+      <div><div class="stat-num">இலவசம்</div><div class="stat-lbl"><span class="ta">எப்போதும்</span><span class="en">Always Free</span></div></div>
+    </div>
+  </div>
+
+  <!-- Hero price card -->
+  <div class="hero-visual">
+    <div style="position:relative;">
+      <div class="price-card">
+        <div class="pc-header">
+          <div class="pc-title">
+            🛒 <span class="ta">இந்த வார விலை — ஏறாவூர்</span><span class="en">Weekly Prices — Eravur</span>
+          </div>
+          <div class="pc-date"><span class="ta">திங்கள் தோறும் புதுப்பிக்கப்படும்</span><span class="en">Updated every Monday</span></div>
+        </div>
+        <div class="pc-row">
+          <div class="pc-item">🧅 <span class="ta">வெங்காயம் (1kg)</span><span class="en">Onion (1kg)</span></div>
+          <div class="pc-vals"><span class="pc-old">Rs.185</span><span class="pc-best">Rs.155 ✓</span></div>
+        </div>
+        <div class="pc-row">
+          <div class="pc-item">🐟 <span class="ta">வாவல் மீன் (1kg)</span><span class="en">Seer Fish (1kg)</span></div>
+          <div class="pc-vals"><span class="pc-old">Rs.980</span><span class="pc-best">Rs.860 ✓</span></div>
+        </div>
+        <div class="pc-row">
+          <div class="pc-item">🥚 <span class="ta">முட்டை (1)</span><span class="en">Egg (1 piece)</span></div>
+          <div class="pc-vals"><span class="pc-old">Rs.24</span><span class="pc-best">Rs.20 ✓</span></div>
+        </div>
+        <div class="pc-row">
+          <div class="pc-item">🐔 <span class="ta">கோழி (1kg)</span><span class="en">Chicken (1kg)</span></div>
+          <div class="pc-vals"><span class="pc-old">Rs.950</span><span class="pc-best">Rs.880 ✓</span></div>
+        </div>
+        <div class="pc-row">
+          <div class="pc-item">🍅 <span class="ta">தக்காளி (1kg)</span><span class="en">Tomato (1kg)</span></div>
+          <div class="pc-vals"><span class="pc-old">Rs.210</span><span class="pc-best">Rs.160 ✓</span></div>
+        </div>
+      </div>
+      <div class="float-badge fb-top">
+        <div class="fb-ic g">💰</div>
+        <div>
+          <div class="fb-t1"><span class="ta">வாரந்தோறும் சேமிப்பு</span><span class="en">Weekly savings</span></div>
+          <div class="fb-t2">Rs. 350 – 500</div>
+        </div>
+      </div>
+      <div class="float-badge fb-bot">
+        <div class="fb-ic a">📍</div>
+        <div>
+          <div class="fb-t1"><span class="ta">கவரும் பகுதி</span><span class="en">Covering</span></div>
+          <div class="fb-t2"><span class="ta">ஏறாவூர் சந்தை</span><span class="en">Eravur Bazaar</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="m-item"><span class="m-dot"></span> 🥬 <span class="ta">காய்கறி —</span><span class="en">Vegetables —</span> <strong><span class="ta">வாராந்திர புதுப்பிப்பு</span><span class="en">Weekly Update</span></strong></span>
+    <span class="m-item"><span class="m-dot"></span> 🐟 <span class="ta">மீன் விலை —</span><span class="en">Fish Prices —</span> <strong><span class="ta">காலை fresh</span><span class="en">Morning Fresh</span></strong></span>
+    <span class="m-item"><span class="m-dot"></span> 🐔 <span class="ta">கோழி & இறைச்சி —</span><span class="en">Chicken & Meat —</span> <strong><span class="ta">சிறந்த விலை</span><span class="en">Best Price</span></strong></span>
+    <span class="m-item"><span class="m-dot"></span> 🛒 <span class="ta">கிரசரி —</span><span class="en">Groceries —</span> <strong>35+ <span class="ta">கடைகள்</span><span class="en">Vendors</span></strong></span>
+    <span class="m-item"><span class="m-dot"></span> 🥚 <span class="ta">முட்டை & பால் —</span><span class="en">Eggs & Dairy —</span> <strong><span class="ta">தினசரி track</span><span class="en">Daily Tracking</span></strong></span>
+    <span class="m-item"><span class="m-dot"></span> 💰 <span class="ta">Rs.350–500 சேமிப்பு —</span><span class="en">Save Rs.350–500 —</span> <strong><span class="ta">ஒவ்வொரு வாரமும்</span><span class="en">Every Week</span></strong></span>
+    <span class="m-item"><span class="m-dot"></span> 🥬 <span class="ta">காய்கறி —</span><span class="en">Vegetables —</span> <strong><span class="ta">வாராந்திர புதுப்பிப்பு</span><span class="en">Weekly Update</span></strong></span>
+    <span class="m-item"><span class="m-dot"></span> 🐟 <span class="ta">மீன் விலை —</span><span class="en">Fish Prices —</span> <strong><span class="ta">காலை fresh</span><span class="en">Morning Fresh</span></strong></span>
+    <span class="m-item"><span class="m-dot"></span> 🐔 <span class="ta">கோழி & இறைச்சி —</span><span class="en">Chicken & Meat —</span> <strong><span class="ta">சிறந்த விலை</span><span class="en">Best Price</span></strong></span>
+    <span class="m-item"><span class="m-dot"></span> 🛒 <span class="ta">கிரசரி —</span><span class="en">Groceries —</span> <strong>35+ <span class="ta">கடைகள்</span><span class="en">Vendors</span></strong></span>
+    <span class="m-item"><span class="m-dot"></span> 🥚 <span class="ta">முட்டை & பால் —</span><span class="en">Eggs & Dairy —</span> <strong><span class="ta">தினசரி track</span><span class="en">Daily Tracking</span></strong></span>
+    <span class="m-item"><span class="m-dot"></span> 💰 <span class="ta">Rs.350–500 சேமிப்பு —</span><span class="en">Save Rs.350–500 —</span> <strong><span class="ta">ஒவ்வொரு வாரமும்</span><span class="en">Every Week</span></strong></span>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="s-hdr center">
+    <span class="s-label ta">எப்படி வேலை செய்கிறது</span>
+    <span class="s-label en">How It Works</span>
+    <h2 class="s-title">
+      <span class="ta">எளிமையானது. <em>இலவசம்.</em> பயனுள்ளது.</span>
+      <span class="en">Simple. <em>Free.</em> Powerful.</span>
+    </h2>
+    <p class="s-sub ta">வீட்டை விட்டு கிளம்பும் முன் ஏறாவூரில் மலிவான விலை எங்கே என்று தெரிந்துகொள்ளுங்கள்.</p>
+    <p class="s-sub en">ePola makes it effortless to find the best prices in Eravur before you leave home.</p>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-n">1</div>
+      <div class="step-ico">📲</div>
+      <div class="step-ttl ta">WhatsApp Channel சேருங்கள்</div>
+      <div class="step-ttl en">Join Our WhatsApp Channel</div>
+      <p class="step-dsc ta">ePola-வின் இலவச WhatsApp Channel-ல் சேருங்கள். ஒவ்வொரு வாரமும் திங்கள் அன்று புதிய விலை updates நேரடியாக உங்கள் phone-க்கு வரும்.</p>
+      <p class="step-dsc en">Subscribe to ePola's free WhatsApp Channel to get weekly price updates and instant alerts delivered directly to your phone every Monday.</p>
+    </div>
+    <div class="step">
+      <div class="step-n">2</div>
+      <div class="step-ico">📊</div>
+      <div class="step-ttl ta">விலைகளை ஒப்பிடுங்கள்</div>
+      <div class="step-ttl en">Compare Prices</div>
+      <p class="step-dsc ta">ஏறாவூரில் உள்ள 35+ கடைகளின் காய்கறி, மீன், கோழி, கிரசரி விலைகளை பக்கத்துக்கு பக்கம் compare செய்யுங்கள். யார் இன்று மலிவாக விற்கிறார்கள் என்று உடனே தெரியும்.</p>
+      <p class="step-dsc en">See side-by-side price comparisons from 35+ Eravur vendors — vegetables, fish, groceries, meat — and instantly find who has the cheapest price today.</p>
+    </div>
+    <div class="step">
+      <div class="step-n">3</div>
+      <div class="step-ico">💰</div>
+      <div class="step-ttl ta">புத்திசாலியாக வாங்குங்கள்</div>
+      <div class="step-ttl en">Shop Smart & Save</div>
+      <p class="step-dsc ta">வீட்டை விட்டு கிளம்பும் முன்பே எங்கே வாங்க வேண்டும் என்று தெரிந்திருங்கள். ePola பயன்படுத்தும் ஏறாவூர் குடும்பங்கள் வாரந்தோறும் Rs.350–500 சேமிக்கின்றன.</p>
+      <p class="step-dsc en">Know exactly where to shop before you leave home. Eravur families using ePola save Rs. 350–500 every single week on daily shopping.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section id="cats">
+  <div class="s-hdr">
+    <span class="s-label ta">நாங்கள் track செய்வது</span>
+    <span class="s-label en">What We Track</span>
+    <h2 class="s-title">
+      <span class="ta">உங்களுக்கு தேவையான <em>எல்லாமே</em></span>
+      <span class="en">Every Category <em>You Need</em></span>
+    </h2>
+    <p class="s-sub ta">காலை காய்கறி முதல் வாராந்திர கிரசரி வரை — ஏறாவூர் குடும்பங்கள் தினசரி வாங்கும் எல்லாவற்றையும் ePola track செய்கிறது.</p>
+    <p class="s-sub en">From morning vegetables to weekly groceries — ePola covers everything Eravur families buy daily.</p>
+  </div>
+  <div class="cats">
+    <div class="cat"><div class="cat-ico">🥬</div><div class="cat-nm ta">காய்கறி</div><div class="cat-nm en">Vegetables</div><div class="cat-nt ta">தினசரி விலை</div><div class="cat-nt en">Daily prices</div></div>
+    <div class="cat"><div class="cat-ico">🐟</div><div class="cat-nm ta">மீன்</div><div class="cat-nm en">Fish</div><div class="cat-nt ta">காலை fresh விலை</div><div class="cat-nt en">Morning fresh</div></div>
+    <div class="cat"><div class="cat-ico">🐔</div><div class="cat-nm ta">கோழி</div><div class="cat-nm en">Chicken</div><div class="cat-nt ta">வாராந்திர track</div><div class="cat-nt en">Weekly tracking</div></div>
+    <div class="cat"><div class="cat-ico">🥩</div><div class="cat-nm ta">இறைச்சி</div><div class="cat-nm en">Meat</div><div class="cat-nt ta">சிறந்த விலை alerts</div><div class="cat-nt en">Best price alerts</div></div>
+    <div class="cat"><div class="cat-ico">🛒</div><div class="cat-nm ta">கிரசரி</div><div class="cat-nm en">Groceries</div><div class="cat-nt ta">20+ கடைகள்</div><div class="cat-nt en">20+ shops</div></div>
+    <div class="cat"><div class="cat-ico">🥚</div><div class="cat-nm ta">முட்டை & பால்</div><div class="cat-nm en">Eggs & Dairy</div><div class="cat-nt ta">வாராந்திர update</div><div class="cat-nt en">Weekly updates</div></div>
+    <div class="cat"><div class="cat-ico">🍅</div><div class="cat-nm ta">பழங்கள்</div><div class="cat-nm en">Fruits</div><div class="cat-nt ta">பருவகால விலை</div><div class="cat-nt en">Seasonal prices</div></div>
+    <div class="cat"><div class="cat-ico">🌶️</div><div class="cat-nm ta">மசாலா</div><div class="cat-nm en">Spices</div><div class="cat-nt ta">விரைவில் வருகிறது</div><div class="cat-nt en">Coming soon</div></div>
+  </div>
+</section>
+
+<!-- PRICE TABLE — LIVE from OneDrive -->
+<section class="price-sec" id="prices">
+  <div class="s-hdr">
+    <span class="s-label ta">இந்த வார விலை — நேரடி தரவு</span>
+    <span class="s-label en">This Week's Live Prices</span>
+    <h2 class="s-title">
+      <span class="ta"><em>ஏறாவூரில்</em> இந்த வாரம்</span>
+      <span class="en">This Week in <em>Eravur</em></span>
+    </h2>
+    <p class="s-sub ta">கீழே உள்ள விலைகள் ஒவ்வொரு திங்கள் அன்று நேரடியாக புதுப்பிக்கப்படும். எந்த app-உம் தேவையில்லை.</p>
+    <p class="s-sub en">Prices below update live every Monday directly from our market team. No app needed.</p>
+  </div>
+
+  <!-- Live embed wrapper -->
+  <div style="
+    background: rgba(255,255,255,0.04);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 4px;
+  ">
+    <!-- Last updated badge -->
+    <div style="
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 20px 10px;
+    ">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="width:8px;height:8px;background:#00c48c;border-radius:50%;display:inline-block;animation:pulse 2s infinite;"></span>
+        <span style="font-size:0.78rem;color:rgba(255,255,255,0.5);">
+          <span class="ta">ஒவ்வொரு திங்களும் புதுப்பிக்கப்படும்</span>
+          <span class="en">Updated every Monday</span>
+        </span>
+      </div>
+      <span style="font-size:0.72rem;color:rgba(255,255,255,0.35);">
+        📊 ePola Price Tracker · epolalk.net
+      </span>
+    </div>
+
+    <!-- OneDrive Live Embed -->
+    <iframe
+      width="100%"
+      height="700"
+      frameborder="0"
+      scrolling="no"
+      src="https://1drv.ms/x/c/d45fe422f8180f8d/IQThCYTTNO8SS4QCEQHvUIpcAe120QfSsl03P9nauo0J5vs?em=2&Item=%27%F0%9F%93%8A%20Weekly%20Prices%27!A4%3AK108&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True&wdInConfigurator=True&edaebf=rslc0"
+      style="display:block; border-radius:12px; background:transparent;"
+      title="ePola Weekly Price Tracker"
+      loading="lazy"
+    ></iframe>
+
+    <!-- Footer note -->
+    <div style="
+      text-align:center; padding:14px;
+      font-size:0.76rem; color:rgba(255,255,255,0.3);
+      border-top:1px solid rgba(255,255,255,0.06);
+    ">
+      <span class="ta">⚡ இந்த விலைகள் ஏறாவூர் சந்தையில் இருந்து நேரடியாக சேகரிக்கப்படுகின்றன. ஒவ்வொரு திங்கள் காலை புதுப்பிக்கப்படும்.</span>
+      <span class="en">⚡ Prices collected directly from Eravur market vendors. Updated every Monday morning.</span>
+    </div>
+  </div>
+</section>
+
+<!-- WHY EPOLA -->
+<section id="about">
+  <div class="s-hdr">
+    <span class="s-label ta">ஏன் ePola?</span>
+    <span class="s-label en">Why ePola</span>
+    <h2 class="s-title">
+      <span class="ta"><em>ஏறாவூர் குடும்பங்களுக்காக</em> கட்டப்பட்டது</span>
+      <span class="en">Built for <em>Eravur Families</em></span>
+    </h2>
+    <p class="s-sub ta">இது ஒரு tech product மட்டுமல்ல — ஏறாவூர் சமூகத்தின் ஒவ்வொரு குடும்பமும் வாரந்தோறும் பணம் சேமிக்க வேண்டும் என்ற நோக்கத்தில் கட்டப்பட்ட community service.</p>
+    <p class="s-sub en">Not just a tech product — a community service built to genuinely help every Eravur household save money every single week.</p>
+  </div>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-ico">💯</div>
+      <div class="why-ttl ta">100% இலவசம் — எப்போதும்</div>
+      <div class="why-ttl en">100% Free — Always</div>
+      <p class="why-dsc ta">ePola பயனர்களிடம் ஒருபோதும் கட்டணம் வசூலிக்காது. கடை விளம்பரங்கள் மற்றும் vendor partnerships மூலம் revenue ஈட்டப்படும். உங்களுக்கு எப்போதும் இலவசம்.</p>
+      <p class="why-dsc en">ePola will never charge consumers. Revenue comes from vendor partnerships and brand advertising — users always access prices for free, forever.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-ico">📍</div>
+      <div class="why-ttl ta">ஏறாவூருக்கே உரியது</div>
+      <div class="why-ttl en">Hyper-Local to Eravur</div>
+      <p class="why-dsc ta">கொழும்பு விலைகள் இல்லை. உங்கள் ஏறாவூர் சந்தை, மீன் கடை, அண்டை வீட்டு கிரசரி கடை விலைகள் மட்டுமே. நடந்து செல்லும் தூரத்தில் உள்ள கடைகள்.</p>
+      <p class="why-dsc en">No Colombo prices. Only YOUR market — Eravur Bazaar, local fish stalls, neighborhood grocery shops. Every price is walking distance from your home.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-ico">🔄</div>
+      <div class="why-ttl ta">ஒவ்வொரு வாரமும் புதுப்பிக்கப்படும்</div>
+      <div class="why-ttl en">Updated Every Week</div>
+      <p class="why-dsc ta">எங்கள் குழுவினர் ஒவ்வொரு காலையும் ஏறாவூர் சந்தைக்கு சென்று விலைகளை சேகரிக்கிறார்கள். திங்கள் தோறும் full update. திடீர் விலை குறைவுக்கு உடனடி alert.</p>
+      <p class="why-dsc en">Our ground team visits the Eravur market every morning. Full update every Monday, plus instant alerts for sudden price drops on key items.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-ico">🤝</div>
+      <div class="why-ttl ta">சமூகத்தின் சொந்த platform</div>
+      <div class="why-ttl en">Community-Owned Platform</div>
+      <p class="why-dsc ta">ePola ஏறாவூர் சமூகத்துக்காக, ஏறாவூர் மக்களின் நலனில் அக்கறை கொண்டவர்களால் கட்டப்பட்டது. இங்கே கடைக்காரர்கள் partners. குடும்பங்கள் priority. இந்த platform ஏறாவூருக்கு சொந்தமானது.</p>
+      <p class="why-dsc en">ePola is built for the Eravur community by people who care about this community. Local vendors are partners. Families are the priority. This platform belongs to Eravur.</p>
+    </div>
+  </div>
+</section>
+
+<!-- VENDOR NUMBERS -->
+<section class="vn-sec">
+  <div class="s-hdr center">
+    <span class="s-label ta">எங்கள் வலைப்பின்னல்</span>
+    <span class="s-label en">Our Reach</span>
+    <h2 class="s-title">
+      <span class="ta">ஏறாவூரின் மிகப்பெரிய <em>விலை network</em></span>
+      <span class="en">Eravur's Largest <em>Price Network</em></span>
+    </h2>
+    <p class="s-sub ta">ஒவ்வொரு வாரமும் புதிய கடைகள் ePola சமூகத்தில் இணைகின்றன.</p>
+    <p class="s-sub en">Growing every week as more vendors join the ePola community.</p>
+  </div>
+  <div class="vn-grid">
+    <div class="vn-card"><div class="vn-num">35+</div><div class="vn-lbl ta">கடைகள் பட்டியலிடப்பட்டுள்ளன</div><div class="vn-lbl en">Vendors Listed</div></div>
+    <div class="vn-card"><div class="vn-num">8+</div><div class="vn-lbl ta">வகைகள் track செய்யப்படுகின்றன</div><div class="vn-lbl en">Categories Covered</div></div>
+    <div class="vn-card"><div class="vn-num">Rs.500</div><div class="vn-lbl ta">சராசரி வாராந்திர சேமிப்பு</div><div class="vn-lbl en">Avg. Weekly Family Savings</div></div>
+    <div class="vn-card"><div class="vn-num ta">இலவசம்</div><div class="vn-num en">Free</div><div class="vn-lbl ta">பயனர்களுக்கு — எப்போதும்</div><div class="vn-lbl en">For Users — Forever</div></div>
+  </div>
+</section>
+
+<!-- WA CTA -->
+<div class="wa-sec">
+  <h2 class="wa-ttl ta">இந்த வாரமே சேமிக்க தொடங்குங்கள்!</h2>
+  <h2 class="wa-ttl en">Start Saving Money This Week!</h2>
+  <p class="wa-sub ta">ePola பயன்படுத்தி புத்திசாலியாக வாங்கும் நூற்றுக்கணக்கான ஏறாவூர் குடும்பங்களில் நீங்களும் சேருங்கள்.</p>
+  <p class="wa-sub en">Join hundreds of Eravur families already using ePola to shop smarter and save more every week.</p>
+  <div>
+    <a href="https://wa.me/94761736615" class="btn-wa" target="_blank">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.118.553 4.107 1.522 5.837L.057 23.882l6.168-1.445A11.933 11.933 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.785 9.785 0 0 1-4.99-1.367l-.358-.213-3.714.87.936-3.619-.234-.372A9.789 9.789 0 0 1 2.182 12c0-5.42 4.398-9.818 9.818-9.818 5.42 0 9.818 4.398 9.818 9.818 0 5.42-4.398 9.818-9.818 9.818z"/></svg>
+      <span class="ta">WhatsApp Channel சேருங்கள்</span><span class="en">Join WhatsApp Channel</span>
+    </a>
+    <a href="https://www.facebook.com/profile.php?id=61590635816197" class="btn-fb" target="_blank">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+      <span class="ta">Facebook Follow செய்யுங்கள்</span><span class="en">Follow on Facebook</span>
+    </a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-grid">
+    <div>
+      <div class="ft-logo"><span>e</span>Pola</div>
+      <p class="ft-desc ta">ஏறாவூரின் இலவச daily கிரசரி & சந்தை விலை tracker. மட்டக்களப்பு சமூகத்திற்காக — உண்மையான விலைகள், ஒவ்வொரு வாரமும், முற்றிலும் இலவசம்.</p>
+      <p class="ft-desc en">Eravur's free daily grocery and market price tracker. Serving the Batticaloa community with honest, real prices from local vendors every week — completely free.</p>
+      <div class="ft-contact">
+        <a href="tel:+94761736615">📞 +94 76 173 6615</a>
+        <a href="mailto:epola@epolalk.net">✉️ epola@epolalk.net</a>
+        <a href="#">📍 <span class="ta">ஏறாவூர், மட்டக்களப்பு மாவட்டம், இலங்கை</span><span class="en">Eravur, Batticaloa District, Sri Lanka</span></a>
+      </div>
+    </div>
+    <div>
+      <div class="ft-col-ttl ta">விரைவு இணைப்புகள்</div>
+      <div class="ft-col-ttl en">Quick Links</div>
+      <div class="ft-links">
+        <a href="#how"><span class="ta">எப்படி வேலை செய்கிறது</span><span class="en">How It Works</span></a>
+        <a href="#cats"><span class="ta">வகைகள்</span><span class="en">Categories</span></a>
+        <a href="#prices"><span class="ta">வாராந்திர விலைகள்</span><span class="en">Weekly Prices</span></a>
+        <a href="#about"><span class="ta">ePola பற்றி</span><span class="en">About ePola</span></a>
+      </div>
+    </div>
+    <div>
+      <div class="ft-col-ttl ta">இணையுங்கள்</div>
+      <div class="ft-col-ttl en">Connect</div>
+      <div class="ft-links">
+        <a href="https://wa.me/94761736615" target="_blank">📲 WhatsApp Channel</a>
+        <a href="https://www.facebook.com/profile.php?id=61590635816197" target="_blank">📘 Facebook Page</a>
+        <a href="mailto:epola@epolalk.net">✉️ <span class="ta">எங்களை தொடர்புகொள்ளுங்கள்</span><span class="en">Email Us</span></a>
+        <a href="#">🏪 <span class="ta">உங்கள் கடையை சேருங்கள்</span><span class="en">List Your Shop</span></a>
+      </div>
+    </div>
+  </div>
+  <div class="ft-bottom">
+    <div>© 2025 ePola — epolalk.net · <span class="ta">அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை · ஏறாவூர், மட்டக்களப்பு, இலங்கை</span><span class="en">All rights reserved · Eravur, Batticaloa, Sri Lanka</span></div>
+    <div class="ft-socials">
+      <a href="https://wa.me/94761736615" class="ft-soc" target="_blank">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.118.553 4.107 1.522 5.837L.057 23.882l6.168-1.445A11.933 11.933 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.785 9.785 0 0 1-4.99-1.367l-.358-.213-3.714.87.936-3.619-.234-.372A9.789 9.789 0 0 1 2.182 12c0-5.42 4.398-9.818 9.818-9.818 5.42 0 9.818 4.398 9.818 9.818 0 5.42-4.398 9.818-9.818 9.818z"/></svg>
+      </a>
+      <a href="https://www.facebook.com/profile.php?id=61590635816197" class="ft-soc" target="_blank">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function setLang(lang) {
+    document.body.classList.toggle('lang-en', lang === 'en');
+    document.getElementById('btn-ta').classList.toggle('active', lang === 'ta');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    localStorage.setItem('epola-lang', lang);
+  }
+  // Restore saved language
+  const saved = localStorage.getItem('epola-lang');
+  if (saved === 'en') setLang('en');
+</script>
+</body>
+</html>
